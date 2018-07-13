@@ -24,7 +24,8 @@
         - libxslt1-dev
         - build-essential
         - postgresql-client
-        - libmysqlclient-dev curl 
+				- libmysqlclient-dev
+				- curl 
         - doxygen
         - g++
         - graphviz-dev
