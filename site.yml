@@ -47,32 +47,37 @@
         - openjdk-9-jre-headless
         - git
 
-    - name: Install elasticsearch
-      apt:
-        name: elasticsearch
-        state: present
+    # - name: Install elasticsearch
+    #   apt:
+    #     name: elasticsearch
+    #     state: present
 
-    - name: Create virtualenv
-      shell: virtualenv /root/rtd
-      args:
-        creates: /root/trd/bin/python
+    # - name: Create virtualenv
+    #   shell: virtualenv /root/rtd
+    #   args:
+    #     creates: /root/trd/bin/python
 
-    - name: Create checkouts
-      file: 
-        path: /root/rtd/checkouts
-        state: directory
+    # - name: Create checkouts
+    #   file: 
+    #     path: /root/rtd/checkouts
+    #     state: directory
 
-    - name: Clone rtd 
-      git:
-        repo: https://github.com/rtfd/readthedocs.org.git
-        dest: /root/rtd/checkouts/readthedocs.org
-        clone: yes
+    # - name: Clone rtd 
+    #   git:
+    #     repo: https://github.com/rtfd/readthedocs.org.git
+    #     dest: /root/rtd/checkouts/readthedocs.org
+    #     clone: yes
 
-    - name: Install requirements
-      pip:
-        chdir: /root/rtd/checkouts/readthedocs.org/
-        requirements: requirements.txt
-        virtualenv: /root/rtd
+    # - name: Downgrade pip
+    #   pip:
+    #     name: pip
+    #     version: 9.0.0
+
+    # - name: Install requirements
+    #   pip:
+    #     chdir: /root/rtd/checkouts/readthedocs.org/
+    #     requirements: requirements.txt
+    #     virtualenv: /root/rtd
         
 
 # vim: ts=2 et nowrap autoindent
