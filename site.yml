@@ -6,9 +6,31 @@
   tasks:
 
     - name: Disable dpkg fsync
-      raw: test -e /etc/dpkg/dpkg.cfg.d/unsafe-io || echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/unsafe-io
+      shell: test -e /etc/dpkg/dpkg.cfg.d/unsafe-io || echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/unsafe-io
+      args: 
+        creates: /etc/dpkg/dpkg.cfg.d/unsafe-io
 
-    - name: Install required debs
+    - name: Install https apt transport
+      apt:
+        name: apt-transport-https
+        state: present
+
+    - name: Install elasticsearch key
+      apt_key: 
+        id: D88E42B4
+        keyserver: pgp.mit.edu
+
+    - name: Install elasticsearch repo
+      apt_repository: 
+        repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+        state: present
+
+    - name: Upgrade Debian
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Install required Debian packages
       apt:
         name: "{{ item }}"
         state: present
@@ -22,5 +44,35 @@
         - zlib1g-dev
         - redis-server
         - virtualenv
+        - openjdk-9-jre-headless
+        - git
+
+    - name: Install elasticsearch
+      apt:
+        name: elasticsearch
+        state: present
+
+    - name: Create virtualenv
+      shell: virtualenv /root/rtd
+      args:
+        creates: /root/trd/bin/python
+
+    - name: Create checkouts
+      file: 
+        path: /root/rtd/checkouts
+        state: directory
+
+    - name: Clone rtd 
+      git:
+        repo: https://github.com/rtfd/readthedocs.org.git
+        dest: /root/rtd/checkouts/readthedocs.org
+        clone: yes
+
+    - name: Install requirements
+      pip:
+        chdir: /root/rtd/checkouts/readthedocs.org/
+        requirements: requirements.txt
+        virtualenv: /root/rtd
+        
 
 # vim: ts=2 et nowrap autoindent
